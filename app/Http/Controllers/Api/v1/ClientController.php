@@ -76,7 +76,7 @@ class ClientController extends Controller
     {
         $validated = $this->validateData($request);
         
-        $client->fill($request->put())->save();
+        $client->fill($request->post())->save();
         return response()->json([
             'message' => 'Trabajador actualizado con éxito',
             'data' => $client

@@ -19,7 +19,9 @@ return new class extends Migration
             $table->string('last_name_1', 50);
             $table->string('last_name_2', 50)->nullable();
             $table->string('phone', 15);
+            $table->string('email');
             $table->text('note')->nullable();
+            $table->boolean('active')->default(true);
             $table->timestamps();
         });
     }

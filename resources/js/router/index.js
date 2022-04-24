@@ -1,13 +1,13 @@
 import { createRouter, createWebHistory } from "vue-router"
 
-import clients from './clients.js'
+import clients from '../modules/clients/router/clients.js'
 import home from './home.js'
 import appointments from './appointments.js'
 import billing from './billing.js'
 import settings from './settings.js'
 import treatments from './treatments.js'
 import products from './products.js'
-import auth from './auth.js'
+import auth from '../modules/auth/router/auth.js'
 
 const notFound = { 
     path: '/:pathMatch(.*)*', 

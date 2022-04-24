@@ -63,7 +63,6 @@
         <button @click="logMeOut()" class="btn">
           <i class="fa-solid fa-power-off"></i> Salir
         </button>
-        <logout-form />
       </div>
     </div>
   </nav>
@@ -78,12 +77,13 @@ export default {
     //LogoutForm,
   },
   mounted() {
-    console.log("mount");
+    /*
     function fullHeight() {
       document.querySelector("#sidebar").style.height = window.innerHeight;
     }
     fullHeight();
     window.addEventListener("resize", fullHeight);
+    */
     document
       .querySelector("#sidebarCollapse")
       .addEventListener("click", function () {
@@ -93,7 +93,6 @@ export default {
   methods: {
     ...mapActions('auth', ['logout']),
     async logMeOut() {
-      //document.querySelector("#logoutForm").submit();
       if(await this.logout()) this.$router.push({name: 'login'})
       else console.log('no se pudo hacer logout')
     },

@@ -47,7 +47,6 @@ export default {
                     key: 'Bearer '+key,
                     logged: true
                 })
-                console.log('key stored')
                 return true
             } else return false
         },
@@ -63,7 +62,6 @@ export default {
             })
             const { status } = response
             if(status === 200 || status === 401){
-                console.log('wtf')
                 localStorage.setItem('apiKey', '')
                 commit('setKey', {
                     key: '',
