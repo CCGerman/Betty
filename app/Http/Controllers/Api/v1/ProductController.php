@@ -117,6 +117,10 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
+        $product->bill->delete();
+        foreach($product->image as $image){
+            $image->delete();
+        }
         $product->delete();
 
         return response()->json([
@@ -145,7 +149,7 @@ class ProductController extends Controller
             'name' => 'required|string|max:100',
             'price' => 'required|numeric|min:0',
             'description' => 'string',
-            'image' => 'required|image|mimes:jpg,png,jpeg,gif,svg|max:2048',
+            'image' => 'image|mimes:jpg,png,jpeg,gif,svg|max:2048',
             'image_description' => 'string'
         ]);
     }

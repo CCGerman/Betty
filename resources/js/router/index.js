@@ -5,8 +5,8 @@ import home from './home.js'
 import appointments from './appointments.js'
 import billing from './billing.js'
 import settings from './settings.js'
-import treatments from './treatments.js'
-import products from './products.js'
+import treatments from '../modules/treatments/router/treatments.js'
+import products from '../modules/products/router/products.js'
 import auth from '../modules/auth/router/auth.js'
 
 const notFound = { 

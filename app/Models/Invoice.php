@@ -10,7 +10,7 @@ class Invoice extends Model
 {
     use HasFactory, HasCompositePrimaryKey;
 
-    protected $fillable = ['serie', 'number', 'client_id', 'date'];
+    protected $fillable = ['serie', 'number', 'client_id', 'address_id', 'date'];
 
     protected $primaryKey = ['serie', 'number'];
     public $incrementing = false;
@@ -21,6 +21,10 @@ class Invoice extends Model
 
     public function serie(){
         return $this->belongsTo(InvoiceSerie::class);
+    }
+
+    public function address(){
+        return $this->morphOne(Address::class, 'addressable');
     }
 
     public function invoiceLines(){

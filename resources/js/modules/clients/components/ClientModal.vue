@@ -49,11 +49,11 @@
         <div class="input-group mb-3">
             <label class="form-label-sm col-12">Dirección</label>
             <div class="input-group mb-1">
-                <span class="input-group-text col-12 col-sm-4" id="address1-addon">Línea 1</span>
+                <span class="input-group-text col-12 col-sm-4" id="address_1-addon">Línea 1</span>
                 <input type="text" class="form-control" id="address1" :class="{'is-invalid' : errors.address1}"
-                placeholder="Línea 1" v-model="client.address.address_1" aria-describedby="address1-addon">
-                <div v-if="errors.address1" class="invalid-feedback">
-                    {{ errors.address1 }}
+                placeholder="Línea 1" v-model="client.address.address_1" aria-describedby="address_1-addon">
+                <div v-if="errors.address_1" class="invalid-feedback">
+                    {{ errors.address_1 }}
                 </div>
             </div>
             <div class="input-group mb-3">
@@ -90,7 +90,7 @@
             <div class="form-check d-flex align-middle">
                 <input class="form-check-input" type="checkbox" id="active"
                 v-model="client.active" true-value=1 false-value=0>
-                <label for="active" class="ps-2 form-check-label">Cliente activo</label>
+                <label for="active" class="ps-2 form-check-label">Activo</label>
             </div>
             <div class="buttons">
                 <div class="row mt-2">
@@ -130,7 +130,7 @@ export default {
         deleteClient(){
             Swal.fire({
                 title: '¿Eliminar el cliente?',
-                text: "El cliente se marcará como inactivo",
+                text: "Esta opción no se puede deshacer",
                 icon: 'warning',
                 showCancelButton: true,
                 cancelButtonColor: '#3085d6',
@@ -158,7 +158,7 @@ export default {
                 this.errors.email = 'El email es obligatorio.'
             }
             if (!this.client.address.address_1) {
-                this.errors.address1 = 'La línea 1 en la direccion es obligatoria.'
+                this.errors.address_1 = 'La línea 1 en la direccion es obligatoria.'
             }
             if (!this.client.address.city) {
                 this.errors.city = 'La localidad es obligatoria.'

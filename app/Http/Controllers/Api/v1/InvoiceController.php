@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\v1;
 
 use App\Http\Controllers\Controller;
+use App\Models\Address;
 use App\Models\Invoice;
 use App\Models\InvoiceLine;
 use App\Models\InvoiceSerie;
@@ -45,6 +46,12 @@ class InvoiceController extends Controller
         $data['number'] = $number;
         $invoice = new Invoice($data);
         $invoice->save();
+
+        $address = new Address($request->post());
+        $address->addressable_id = $invoice->id;
+        $address->addressable_type = $invoice->getMorphClass();
+        $address->save();
+        $invoice->address = $address;
 
         $invoiceAmount = 0;
 
@@ -157,6 +164,11 @@ class InvoiceController extends Controller
                         ->first()->simplified == false
                 ),
             ],
+            'address_1' => 'required|string',
+            'address_2' => 'string',
+            'city' => 'required|string|max:50',
+            'postalcode' => 'required|string|max:15',
+            'country' => 'required|string|max:50',
             'lines' => 'array',
             'lines.*.billable_id' => 'required|exists:billables,id',
             'lines.*.quantity' => 'required',

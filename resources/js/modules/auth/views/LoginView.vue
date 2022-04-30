@@ -57,7 +57,7 @@ export default {
   props: {
     lastView: {
       type: String,
-      required: true,
+      default: 'home'
     }
   },
   data() {
@@ -93,7 +93,9 @@ export default {
     },
   },
   async mounted() {
-    if (await this.recoverKeyFromLocal()) this.$router.push({ name: this.lastView });
+    const response = await this.recoverKeyFromLocal()
+    console.log(response)
+    if (response) this.$router.push({ name: this.lastView });
   },
 }
 </script>

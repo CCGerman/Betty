@@ -117,6 +117,10 @@ class TreatmentController extends Controller
      */
     public function destroy(Treatment $treatment)
     {
+        $treatment->bill->delete();
+        foreach($treatment->image as $image){
+            $image->delete();
+        }
         $treatment->delete();
 
         return response()->json([
@@ -146,7 +150,7 @@ class TreatmentController extends Controller
             'name' => 'required|string|max:100',
             'price' => 'required|numeric|min:0',
             'description' => 'string',
-            'image' => 'required|image|mimes:jpg,png,jpeg,gif,svg|max:2048',
+            'image' => 'image|mimes:jpg,png,jpeg,gif,svg|max:2048',
             'image_description' => 'string'
         ]);
     }

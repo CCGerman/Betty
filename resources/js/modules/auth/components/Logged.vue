@@ -2,6 +2,7 @@
   
 </template>
 <script>
+import { onMounted } from '@vue/runtime-core'
 import { mapState } from 'vuex'
 export default {
   props: {
@@ -13,7 +14,7 @@ export default {
   computed: {
       ...mapState('auth',['logged', 'apiKey']),
   },
-  async mounted(){
+  async created(){
     if(!this.logged) this.$router.push({name: 'login', params:{ lastView: this.lastView }})
   }
 }

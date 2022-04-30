@@ -51,6 +51,7 @@ export default {
     async view(id){
       const result = await getClient(this.apiKey, id)
       this.activeClient = new Client( result.data )
+      console.log(this.activeClient)
       this.showModal = true
     },
     async saveClient(){
@@ -60,7 +61,6 @@ export default {
       } else {
         response = await addClient(this.apiKey, this.activeClient)
       }
-      console.log(response);
       this.activeClient = new Client({});
       this.showModal = false;
       this.refreshData()

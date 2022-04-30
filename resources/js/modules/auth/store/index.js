@@ -40,9 +40,9 @@ export default {
                 return true
             } else return false
         },
-        recoverKeyFromLocal( { commit } ){
+        recoverKeyFromLocal( { state, commit } ){
             const key = localStorage.getItem('apiKey')
-            if(key != ''){
+            if( state.apiKey == '' &&  key != ''){
                 commit('setKey', {
                     key: 'Bearer '+key,
                     logged: true
