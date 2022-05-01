@@ -11,6 +11,7 @@
       align-middle
       overflow-scroll
       py-5
+      modal-element
     "
   >
     <div
@@ -176,7 +177,6 @@ export default {
       if (!this.product.stock) {
         this.errors.stock = "El stock es obligatorio.";
       } else if (isNaN(this.product.stock) || parseFloat(this.product.stock) != this.product.stock) {
-        console.log(parseFloat(this.stock))
         this.errors.stock = "El stock debe ser un número";
       }
 

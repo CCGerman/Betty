@@ -51,7 +51,6 @@ export default {
     async view(id){
       const result = await getTreatment(this.apiKey, id)
       this.activeTreatment = new Treatment( result.data )
-      console.log(this.activeTreatment)
       this.showModal = true
     },
     async saveTreatment(){
@@ -61,7 +60,6 @@ export default {
       } else {
         response = await addTreatment(this.apiKey, this.activeTreatment)
       }
-      console.log(response);
       this.activeTreatment = new Treatment({});
       this.showModal = false;
       this.refreshData()

@@ -176,7 +176,6 @@ export default {
       if (!this.treatment.duration) {
         this.errors.duration = "El duration es obligatorio.";
       } else if (isNaN(this.treatment.duration) || parseFloat(this.treatment.duration) != this.treatment.duration) {
-        console.log(parseFloat(this.duration))
         this.errors.duration = "La duración debe ser un número";
       }
 

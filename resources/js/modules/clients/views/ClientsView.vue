@@ -2,7 +2,7 @@
   <logged lastView="clients" />
   <page-title title="clientes" />
   <clients-table v-if="clients" :clients="clients" @view="view" />
-    <button-new @new="newUser">
+  <button-new @new="newUser">
     <i class="fa-solid fa-user-plus"></i>
   </button-new>
   <client-modal v-if="showModal" :client="activeClient"

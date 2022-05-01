@@ -19,5 +19,7 @@ export default {
 </script>
 
 <style>
-
+  .modal-element {
+    z-index: 15;
+  }
 </style>

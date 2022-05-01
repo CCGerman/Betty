@@ -68,10 +68,6 @@ export default {
     };
   },
   methods: {
-    submit(event) {
-      event.preventDefault();
-      console.log("mail: " + this.mail + "; pass: " + this.password);
-    },
     ...mapActions("auth", ["recoverKeyFromLocal", "getApiKey"]),
     async submitForm(event) {
       this.message = ""
@@ -94,7 +90,6 @@ export default {
   },
   async mounted() {
     const response = await this.recoverKeyFromLocal()
-    console.log(response)
     if (response) this.$router.push({ name: this.lastView });
   },
 }

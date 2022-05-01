@@ -61,7 +61,6 @@ export default {
       } else {
         response = await addProduct(this.apiKey, this.activeProduct)
       }
-      console.log(response);
       this.activeProduct = new Product({});
       this.showModal = false;
       this.refreshData()

@@ -1,5 +1,5 @@
 <template>
-<div class="w-100 h-100 position-fixed top-0 start-0 bg-80 d-flex align-middle overflow-scroll py-5">
+<div class="w-100 h-100 position-fixed top-0 start-0 bg-80 d-flex align-middle overflow-scroll py-5 modal-element">
     <div class="bg-white m-auto p-4 col-11 col-sm-10 col-md-8 col-lg-4 col-xl-3">
         <div class="row mb-2 justify-content-between align-vertical">
             <h3 class="col-8 my-1">{{ title }}</h3>
