@@ -4,11 +4,16 @@
   <calendar
     :appointments="appointments"
     @editEvent="editAppointment"
+    @createEvent="createAppointment"
+    @deleteEvent="deleteAppointment"
   />
   <appointment-modal
     v-if="showModal"
     :appointment="activeAppointment"
-    @hide="showModal=false"
+    :clients="clients"
+    :workers="workers"
+    :treatments="treatments"
+    @cancel="cancel"
     @deleteAppointment="deleteAppointment"
     @saveAppointment="saveAppointment"
   />
@@ -24,10 +29,12 @@ import PageTitle from "../../../components/PageTitle.vue"
 import ButtonNew from "../../../components/ButtonNew.vue"
 import Calendar from "../components/Calendar.vue"
 import { Appointment } from "../../../helpers/Appointment.js"
+import { getTreatments } from '../../treatments/helpers/TreatmentDAO.js'
+import { getClients } from '../../clients/helpers/ClientDAO.js'
+import { getWorkers } from '../../workers/helpers/WorkerDAO.js'
 import AppointmentModal from "../components/AppointmentModal.vue"
 import {
   getAppointments,
-  getAppointment,
   addAppointment,
   saveAppointment,
   deleteAppointment
@@ -45,34 +52,72 @@ export default {
     return {
       appointments: [],
       activeAppointment: new Appointment({}),
+      clients: [],
+      treatments: [],
+      workers: [],
       showModal: false
     }
   },
   methods: {
     async refreshData(){
       if(this.apiKey){
+        const treatments = await getTreatments(this.apiKey)
+        const workers = await getWorkers(this.apiKey)
+        const clients = await getClients(this.apiKey)
+        this.clients = clients.data.filter(c => c.active)
+        this.treatments = treatments.data
+        this.workers = workers.data
+        this.getAppointments()
+
+      }
+    },
+    async getAppointments(){
         const { data } = await getAppointments(this.apiKey)
         const appointments = []
         for(const appointmentData of data){
-          appointments.push(new Appointment(appointmentData))
+          appointmentData.client = this.clients.find( c => c.id == appointmentData.client_id)
+          appointmentData.worker = this.workers.find( c => c.id == appointmentData.worker_id)
+          appointmentData.treatment = this.treatments.find( c => c.id == appointmentData.treatment_id)
+          const _app = new Appointment()
+          _app.create(appointmentData)
+          appointments.push(_app)
         }
         this.appointments = appointments
-      }
     },
     newAppointment() {
-      this.activeAppointment = new Appointment({})
+      const _app = new Appointment()
+      _app.createFromCalendar({}, {}, {}, {})
+      this.activeAppointment = _app
+      this.showModal = true
+    },
+    createAppointment(appointment) {
+      const client = this.clients.find(c => c.id == appointment.client_id) || {}
+      const treatment = this.treatments.find(t => t.id == appointment.treatment_id) || {}
+      const worker = this.workers.find(w => w.id == appointment.split) || {}
+      const _app = new Appointment()
+      _app.createFromCalendar(appointment, client, worker, treatment)
+      this.activeAppointment = _app
       this.showModal = true
     },
     editAppointment(appointment){
-      this.activeAppointment = appointment
-      this.showModal = true
+      this.createAppointment(appointment)
     },
-    saveAppointment(){
-      console.log('guardarCita')
+    saveAppointment(appointment){
+      if(appointment.id)
+      saveAppointment(this.apiKey, appointment)
+      else addAppointment(this.apiKey, appointment)
+      this.getAppointments()
+      this.showModal = false
+
+    },
+    deleteAppointment(id){
+      deleteAppointment(this.apiKey, id)
+      this.getAppointments()
       this.showModal = false
     },
-    deleteAppointment(){
-
+    cancel(){
+      this.getAppointments()
+      this.showModal = false
     }
   },
   computed: {

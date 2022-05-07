@@ -11,21 +11,23 @@ export class AppointmentEvent{
         this.start = appointment.start || new Date()
         this.end = appointment.end || new Date(this.start.getTime() + 60*60000)
         
-        if(appointment.client)
+        if(appointment.client){
+            this.client_id = appointment.client.id
             this.title = `${appointment.client.name} ${appointment.client.last_name_1}`
-        else this.title = "";
+        } else this.title = ""
 
-        if(appointment.treatment)
+        if(appointment.treatment){
+            this.treatment_id = appointment.treatment.id
             this.content= appointment.treatment.name;
-        else this.content = "";
+        } else this.content = ""
 
-        if(appointment.worker)
+        if(appointment.worker){
             this.split =  appointment.worker.id
-        else this.split = 0;
+            this.worker_id =  appointment.worker.id
+        } else this.split = 0
 
         //class: "blue-event",
         //if(appointment.end) {
-            this.deletable = true
             this.resizable = true
             this.draggable = true
         //}

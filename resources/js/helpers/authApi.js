@@ -17,9 +17,11 @@ export const getRequest = async ( url, apiKey ) => {
             if(res.status != 200) throw new Error()
             else return res.json() })
         .catch( err => new Promise(() => {
-            alert('Se perdió la conexión con el servidor')
-            localStorage.setItem('apiKey', '')
-            window.location.href = window.location.origin+'/login'
+            if(err.status == 401){
+                alert('Se perdió la conexión con el servidor')
+                localStorage.setItem('apiKey', '')
+                window.location.href = window.location.origin+'/login'
+            }
         } ))
 
 }
@@ -32,10 +34,12 @@ export const postRequest = async ( url, apiKey, formData ) => {
         body: formData
     }).then( res => { 
         if(res.status != 200) throw new Error()
-        else res.json() })
+        else return res.json() })
     .catch( err => new Promise(() => {
-        alert('Se perdió la conexión con el servidor')
-        localStorage.setItem('apiKey', '')
-        window.location.href = window.location.origin+'/login'
+        if(err.status == 401){
+            alert('Se perdió la conexión con el servidor')
+            localStorage.setItem('apiKey', '')
+            window.location.href = window.location.origin+'/login'
+        }
     } ))
 }

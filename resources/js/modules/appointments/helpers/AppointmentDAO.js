@@ -31,7 +31,20 @@ export const deleteAppointment = async ( apiKey, appointmentId ) => {
 }
 
 const fillAppointment = ( appointment ) => {
+    
+    const dateStart = appointment.start.toISOString().split('T')[0]
+    const hourStart = appointment.start.toLocaleTimeString('it')
+    const start = dateStart+'T'+hourStart
+
+    const dateEnd = appointment.end.toISOString().split('T')[0]
+    const hourEnd = appointment.end.toLocaleTimeString('it')
+    const end = dateEnd+'T'+hourEnd
+
     const formData = new FormData()
-    formData.append('name', appointment.name)
+    formData.append('time_start', start)
+    formData.append('time_end', end)
+    formData.append('worker_id', appointment.worker.id)
+    formData.append('treatment_id', appointment.treatment.id)
+    formData.append('client_id', appointment.client.id)
     return formData
 }

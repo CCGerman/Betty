@@ -1,27 +1,42 @@
 <template>
+<div class="buttons mb-2 d-flex justify-content-evenly">
+  <button class="btn btn-outline-primary" @click="$refs.vuecal.previous()">Anterior</button>
+  <button class="btn btn-outline-primary" @click="$refs.vuecal.switchView('day', new Date())">Hoy</button>
+  <button class="btn btn-outline-primary" @click="$refs.vuecal.next()">Siguiente</button>  
+</div>
   <vue-cal
+    ref="vuecal"
     locale="es"
     active-view="week"
     :disable-views="['years', 'year']"
     :snap-to-time="15"
-    editable-events
+    :time-step="30"
+    :editable-events="{ title: false, drag: true, resize: true, delete: false, create: true }"
     :events="events"
-    :split-days="[
-      { id: 10, label: 'Dr 1' },
-      { id: 12, label: 'Dr 2' },
-    ]"
+    :split-days="workers"
     class="vuecal--full-height-delete"
-    :on-event-dblclick="onEventClick"
-  />
+    :on-event-dblclick="editEvent"
+    @event-drag-create="onDragEventCreate($event)"  
+    @event-drop="editEvent($event.event)"
+    @event-duration-change="editEvent($event.event)"/>
 </template>
 
 <script>
 import VueCal from "vue-cal";
 import "vue-cal/dist/vuecal.css";
 
+import { getWorkers } from '../../workers/helpers/WorkerDAO.js'
+import { mapState } from 'vuex'
+
 export default {
   components: {
     VueCal,
+  },
+  emits: ['editEvent', 'createEvent', 'deleteEvent'],
+  data(){
+    return {
+      workers: []
+    }
   },
   props: {
     appointments: {
@@ -30,10 +45,22 @@ export default {
     },
   },
   methods: {
-      onEventClick(event, e){
-        const appointment = this.appointments.find(v => v.id === event.id)
-        this.$emit('editEvent', appointment)
-        e.stopPropagation()
+      editEvent(event, e){
+        console.log(event)
+        this.$emit('editEvent', event)
+        if(e) e.stopPropagation()
+      },
+      onDragEventCreate(event, deleteEventFunction){
+        return this.$emit('createEvent', event)
+      },
+      async fillWorkers(){
+        if(this.apiKey){
+          const { data } = await getWorkers(this.apiKey)
+          this.workers = data.map( w => ({
+            id: w.id,
+            label: w.name
+          }))
+        }
       }
   },
   computed: {
@@ -43,7 +70,11 @@ export default {
           events.push(appointment.getEvent())
       }
       return events
-    }
+    },
+    ...mapState('auth', ['apiKey'])
+  },
+  mounted(){
+    this.fillWorkers()
   }
 };
 </script>
@@ -81,6 +112,16 @@ export default {
 
   .vuecal__view-btn:not(.vuecal__view-btn--active){
       color: rgba(197, 195, 255, 0.5);
+  }
+
+  .vuecal__event {
+    background-color: rgba(197, 195, 255, 0.5);
+    color: black;
+  }
+
+  .vuecal__event.vuecal__event--focus{
+    background-color: #4250b9;
+    color: white;
   }
 
 </style>

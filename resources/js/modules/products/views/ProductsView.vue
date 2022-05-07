@@ -51,7 +51,6 @@ export default {
     async view(id){
       const result = await getProduct(this.apiKey, id)
       this.activeProduct = new Product( result.data )
-      console.log(this.activeProduct)
       this.showModal = true
     },
     async saveProduct(){

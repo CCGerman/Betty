@@ -46,7 +46,7 @@
       <div class="input-group mb-3">
         <div class="row">
           <div class="input-grup col-4">
-            <label for="duration" class="form-label">duration</label>
+            <label for="duration" class="form-label">Duración</label>
             <input
               type="text"
               class="form-control"
@@ -174,7 +174,7 @@ export default {
       }
 
       if (!this.treatment.duration) {
-        this.errors.duration = "El duration es obligatorio.";
+        this.errors.duration = "La duración es obligatorio.";
       } else if (isNaN(this.treatment.duration) || parseFloat(this.treatment.duration) != this.treatment.duration) {
         this.errors.duration = "La duración debe ser un número";
       }

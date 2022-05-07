@@ -37,6 +37,8 @@ class AppointmentController extends Controller
      */
     public function store(Request $request)
     {
+        //return response()->json($request->post());
+
         $validated = $this->validateData($request);
 
         $appointment = new Appointment($request->post());
@@ -103,7 +105,7 @@ class AppointmentController extends Controller
     private function validateData(Request $request){
 
         return $request->validate([
-            'time_start' => 'required|date_format:Y-m-d\TH:i:s|afterorequal:now',
+            'time_start' => 'required|date|date_format:Y-m-d\TH:i:s|afterorequal:now',
             'time_end' => 'required|date|date_format:Y-m-d\TH:i:s|after:time_start',
             'worker_id' => 'required|exists:workers,id',
             'treatment_id' => 'required|exists:treatments,id',
