@@ -10,6 +10,8 @@
     active-view="week"
     :disable-views="['years', 'year']"
     :snap-to-time="15"
+    :time-from="openTime"
+    :time-to="closeTime"
     :time-step="30"
     :editable-events="{ title: false, drag: true, resize: true, delete: false, create: true }"
     :events="events"
@@ -43,10 +45,17 @@ export default {
       type: Array,
       default: []
     },
+    open: {
+      type: String,
+      default: '08:00'
+    },
+    close: {
+      type: String,
+      default: '20:00'
+    }
   },
   methods: {
       editEvent(event, e){
-        console.log(event)
         this.$emit('editEvent', event)
         if(e) e.stopPropagation()
       },
@@ -70,6 +79,14 @@ export default {
           events.push(appointment.getEvent())
       }
       return events
+    },
+    openTime(){
+      const [ hours, minutes ] = this.open.split(':')
+      return parseInt(hours)*60+parseInt(minutes)
+    },
+    closeTime(){
+      const [ hours, minutes ] = this.close.split(':')
+      return parseInt(hours)*60+parseInt(minutes)
     },
     ...mapState('auth', ['apiKey'])
   },

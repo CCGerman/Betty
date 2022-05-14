@@ -115,6 +115,7 @@ class WorkerController extends Controller
             'city' => 'required|string|max:50',
             'postalcode' => 'required|string|max:15',
             'country' => 'required|string|max:50',
+            'email' => 'required|email'
         ]);
     }
 }

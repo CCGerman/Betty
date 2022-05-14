@@ -9,7 +9,7 @@ class Billable extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'price', 'description'];
+    protected $fillable = ['name', 'price', 'description', 'active'];
 
     public function billable(){
         return $this->morphTo();

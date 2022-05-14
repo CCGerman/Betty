@@ -43,7 +43,7 @@ class ClientController extends Controller
         $client->address = $address;
 
         return response()->json([
-            'message' => 'Trabajador añadido con éxito',
+            'message' => 'Cliente añadido con éxito',
             'data' => $client
         ]);
 
@@ -78,7 +78,7 @@ class ClientController extends Controller
         
         $client->fill($request->post())->save();
         return response()->json([
-            'message' => 'Trabajador actualizado con éxito',
+            'message' => 'Cliente actualizado con éxito',
             'data' => $client
         ]);
 
@@ -95,7 +95,7 @@ class ClientController extends Controller
         $client->delete();
 
         return response()->json([
-            'message' => 'Trabajador eliminado con éxito'
+            'message' => 'Cliente eliminado con éxito'
         ]);
 
     }
@@ -112,6 +112,7 @@ class ClientController extends Controller
             'city' => 'required|string|max:50',
             'postalcode' => 'required|string|max:15',
             'country' => 'required|string|max:50',
+            'email' => 'required|email'
         ]);
     }
 }

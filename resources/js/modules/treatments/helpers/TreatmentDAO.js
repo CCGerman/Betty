@@ -36,5 +36,6 @@ const fillTreatment = ( treatment ) => {
     formData.append('price', treatment.price)
     formData.append('description', treatment.description)
     formData.append('duration', treatment.duration)
+    formData.append('active', treatment.active)
     return formData
 }

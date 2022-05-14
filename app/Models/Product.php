@@ -24,6 +24,7 @@ class Product extends Model
         $billable = $this->bill;
         $this->name = $billable->name;
         $this->price = $billable->price;
+        $this->active = $billable->active;
         $this->description = $billable->description;
         unset($this->bill);
 
