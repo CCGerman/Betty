@@ -3,7 +3,7 @@ import { createRouter, createWebHistory } from "vue-router"
 import clients from '../modules/clients/router/clients.js'
 import home from './home.js'
 import appointments from '../modules/appointments/router/appointments.js'
-import billing from './billing.js'
+import billing from '../modules/billing/router/billing.js'
 import settings from '../modules/settings/router/settings.js'
 import treatments from '../modules/treatments/router/treatments.js'
 import products from '../modules/products/router/products.js'

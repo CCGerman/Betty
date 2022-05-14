@@ -156,8 +156,8 @@ export default {
             const day = splitted[2]
             this.appointment.start.setDate(day)
             this.appointment.end.setDate(day)
-            this.appointment.start.setMonth(month)
-            this.appointment.end.setMonth(month)
+            this.appointment.start.setMonth(month-1)
+            this.appointment.end.setMonth(month-1)
             this.appointment.start.setYear(year)
             this.appointment.end.setYear(year)
         },

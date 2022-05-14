@@ -51,13 +51,11 @@ class InvoiceController extends Controller
         $address->addressable_id = $invoice->id;
         $address->addressable_type = $invoice->getMorphClass();
         $address->save();
-        $invoice->address = $address;
 
         $invoiceAmount = 0;
 
         foreach($data['lines'] as $lineData){
-            $lineData['serie'] = $invoice->serie;
-            $lineData['number'] = $invoice->number;
+            $lineData['invoice_id'] = $invoice->id;
             $line = new InvoiceLine($lineData);
             $line->updateData();
             $line->save();
@@ -68,6 +66,7 @@ class InvoiceController extends Controller
         $invoice->balance = $invoiceAmount;
         $invoice->save();
 
+        $invoice->address = $address;
         $invoice->getData();
 
         return response()->json([
@@ -80,13 +79,11 @@ class InvoiceController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $number
-     * @param string $serie
+     * @param  Invoice $invoice
      * @return \Illuminate\Http\Response
      */
-    public function show($serie, $number)
+    public function show(Invoice $invoice)
     {
-        $invoice = Invoice::where(['number' => $number], ['serie' => $serie])->first();
         $invoice->getData();
 
         return response()->json([
@@ -100,9 +97,8 @@ class InvoiceController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($serie, $number)
+    public function destroy(Invoice $invoice)
     {
-        $invoice = Invoice::where(['number' => $number], ['serie' => $serie])->first();
         $invoice->getData();
 
         if(!$invoice->deleted_on){

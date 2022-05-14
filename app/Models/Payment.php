@@ -9,10 +9,10 @@ class Payment extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['payment_method_id', 'amount', 'number', 'serie', 'client_id'];
+    protected $fillable = ['payment_method_id', 'amount', 'invoice_id', 'client_id'];
 
     public function invoice(){
-        return $this->belongsTo(Invoice::class, 'number', 'number')->where('serie', $this->serie);
+        return $this->belongsTo(Invoice::class);
     }
 
     public function paymentMethod(){

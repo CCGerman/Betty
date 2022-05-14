@@ -89,7 +89,7 @@
         <div class="d-flex justify-content-between">
             <div class="form-check d-flex align-middle">
                 <input class="form-check-input" type="checkbox" id="active"
-                v-model="worker.active" true-value=1 false-value=0>
+                v-model="worker.active" true-value=1 false-value=0 checked>
                 <label for="active" class="ps-2 form-check-label">Activo</label>
             </div>
             <div class="buttons">

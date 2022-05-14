@@ -102,6 +102,7 @@
             v-model="product.active"
             true-value="1"
             false-value="0"
+            cheked
           />
           <label for="active" class="ps-2 form-check-label"
             >Activo</label

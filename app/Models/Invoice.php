@@ -8,12 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Invoice extends Model
 {
-    use HasFactory, HasCompositePrimaryKey;
+    use HasFactory; //HasCompositePrimaryKey;
 
     protected $fillable = ['serie', 'number', 'client_id', 'address_id', 'date'];
-
-    protected $primaryKey = ['serie', 'number'];
-    public $incrementing = false;
 
     public function client(){
         return $this->belongsTo(Client::class);
@@ -28,11 +25,11 @@ class Invoice extends Model
     }
 
     public function invoiceLines(){
-        return $this->hasMany(InvoiceLine::class, 'number', 'number')->where('serie', $this->serie);
+        return $this->hasMany(InvoiceLine::class);
     }
 
     public function payments(){
-        return $this->hasMany(Payment::class, 'number', 'number')->where('serie', $this->serie);
+        return $this->hasMany(Payment::class);
     }
 
     public function getBalance(){
