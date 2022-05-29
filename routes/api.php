@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\V1\WorkerController;
 use App\Http\Controllers\Api\v1\LoginController;
 use App\Http\Controllers\Api\v1\PaymentController;
 use App\Http\Controllers\Api\v1\ProductController;
+use App\Http\Controllers\Api\v1\SettingController;
 use App\Http\Controllers\Api\v1\TreatmentController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -55,11 +56,11 @@ Route::middleware('auth:sanctum')
 Route::middleware('auth:sanctum')
     ->resource('invoice', InvoiceController::class)
     ->only(['index', 'store']);
-    Route::middleware('auth:sanctum')
-    ->get('/invoice/{serie}/{id}', [InvoiceController::class, 'show'])
+Route::middleware('auth:sanctum')
+    ->get('/invoice/{invoice}', [InvoiceController::class, 'show'])
     ->name('invoice.show');
 Route::middleware('auth:sanctum')
-    ->delete('/invoice/{serie}/{id}', [InvoiceController::class, 'destroy'])
+    ->delete('/invoice/{invoice}', [InvoiceController::class, 'destroy'])
     ->name('invoice.destroy');
 
 Route::middleware('auth:sanctum')
@@ -68,3 +69,10 @@ Route::middleware('auth:sanctum')
 
 Route::middleware('auth:sanctum')
     ->resource('image', ImageController::class)->only(['destroy']);
+
+Route::middleware('auth:sanctum')
+    ->resource('setting', SettingController::class)
+    ->only('index', 'store');
+Route::middleware('auth:sanctum')
+    ->delete('/setting', [SettingController::class, 'destroy'])
+    ->name('setting.destroy');

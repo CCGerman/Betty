@@ -18,10 +18,8 @@ return new class extends Migration
             $table->double('amount');
 
             //Invoice
-            $table->unsignedBigInteger('number');
-            $table->string('serie', 10);
-            $table->foreign('number')->references('number')->on('invoices');
-            $table->foreign('serie')->references('serie')->on('invoices');
+            $table->unsignedBigInteger('invoice_id');
+            $table->foreign('invoice_id')->references('id')->on('invoices');
 
             $table->dateTime('time')->default(now());
             $table->unsignedBigInteger('client_id');

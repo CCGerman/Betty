@@ -21,6 +21,7 @@ return new class extends Migration
             $table->unsignedBigInteger('billable_id');
             $table->string('billable_type');
             $table->unique(['billable_id', 'billable_type']);
+            $table->boolean('active')->default(true);
             $table->timestamps();
         });
     }

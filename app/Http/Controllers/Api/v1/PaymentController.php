@@ -114,8 +114,7 @@ class PaymentController extends Controller
         return $request->validate([
             'payment_method_id' => 'required|exists:payment_methods,id',
             'amount' => 'required|min:0',
-            'number' => 'required|exists:invoices,number',
-            'serie' => 'required|exists:invoices,serie',
+            'invoice_id' => 'required|exists:invoices,id',
             'client_id' => 'required|exists:clients,id'
         ]);
     }

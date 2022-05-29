@@ -14,14 +14,12 @@ export const getRequest = async ( url, apiKey ) => {
 
     return await fetch( baseURL + url , { headers: getHeaders(apiKey) })
         .then( res => { 
-            if(res.status != 200) throw new Error()
+            if(res.status == 401) throw new Error('Se desconectó su usuario')
             else return res.json() })
         .catch( err => new Promise(() => {
-            if(err.status == 401){
-                alert('Se perdió la conexión con el servidor')
-                localStorage.setItem('apiKey', '')
-                window.location.href = window.location.origin+'/login'
-            }
+            alert(err)
+            localStorage.setItem('apiKey', '')
+            window.location.href = window.location.origin+'/login'
         } ))
 
 }
@@ -33,13 +31,11 @@ export const postRequest = async ( url, apiKey, formData ) => {
         method: 'POST',
         body: formData
     }).then( res => { 
-        if(res.status != 200) throw new Error()
-        else return res.json() })
+        if(res.status == 401) throw new Error('Se desconectó su usuario')
+        else res.json() })
     .catch( err => new Promise(() => {
-        if(err.status == 401){
-            alert('Se perdió la conexión con el servidor')
-            localStorage.setItem('apiKey', '')
-            window.location.href = window.location.origin+'/login'
-        }
+        alert(err)
+        localStorage.setItem('apiKey', '')
+        window.location.href = window.location.origin+'/login'
     } ))
 }

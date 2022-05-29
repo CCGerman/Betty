@@ -3,6 +3,8 @@
   <page-title title="Citas" />
   <calendar
     :appointments="appointments"
+    :open="open"
+    :close="close"
     @editEvent="editAppointment"
     @createEvent="createAppointment"
     @deleteEvent="deleteAppointment"
@@ -23,7 +25,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 import Logged from "../../auth/components/Logged.vue"
 import PageTitle from "../../../components/PageTitle.vue"
 import ButtonNew from "../../../components/ButtonNew.vue"
@@ -64,9 +66,9 @@ export default {
         const treatments = await getTreatments(this.apiKey)
         const workers = await getWorkers(this.apiKey)
         const clients = await getClients(this.apiKey)
-        this.clients = clients.data.filter(c => c.active)
-        this.treatments = treatments.data
-        this.workers = workers.data
+        this.clients = clients.data.filter( c => c.active )
+        this.treatments = treatments.data.filter( t => t.active )
+        this.workers = workers.data.filter( w => w.active )
         this.getAppointments()
 
       }
@@ -102,10 +104,10 @@ export default {
     editAppointment(appointment){
       this.createAppointment(appointment)
     },
-    saveAppointment(appointment){
+    async saveAppointment(appointment){
       if(appointment.id)
-      saveAppointment(this.apiKey, appointment)
-      else addAppointment(this.apiKey, appointment)
+      await saveAppointment(this.apiKey, appointment)
+      else await addAppointment(this.apiKey, appointment)
       this.getAppointments()
       this.showModal = false
 
@@ -122,6 +124,13 @@ export default {
   },
   computed: {
     ...mapState("auth", ["apiKey"]),
+    ...mapGetters("settings", ["getProperty"]),
+    open(){
+      return this.getProperty('open')
+    },
+    close(){
+      return this.getProperty('close')
+    },
   },
   mounted(){
     this.refreshData()

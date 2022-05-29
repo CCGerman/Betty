@@ -7,7 +7,7 @@ export class Client{
         this.last_name_2 = clientObject.last_name_2,
         this.email = clientObject.email,
         this.phone = clientObject.phone,
-        this.active = clientObject.active,
+        this.active = clientObject.active || 1,
         this.address = (clientObject.address) ?
             this.address = new Address( clientObject.address) :
             new Address({})

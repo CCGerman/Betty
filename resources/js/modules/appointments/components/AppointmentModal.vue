@@ -114,6 +114,7 @@
 <script>
 import Swal from 'sweetalert2'
 import { Appointment } from '../../../helpers/Appointment.js'
+import { mapGetters, mapState } from 'vuex'
 
 export default {
     data() {
@@ -155,8 +156,8 @@ export default {
             const day = splitted[2]
             this.appointment.start.setDate(day)
             this.appointment.end.setDate(day)
-            this.appointment.start.setMonth(month)
-            this.appointment.end.setMonth(month)
+            this.appointment.start.setMonth(month-1)
+            this.appointment.end.setMonth(month-1)
             this.appointment.start.setYear(year)
             this.appointment.end.setYear(year)
         },
@@ -165,7 +166,7 @@ export default {
             const minutes = this.startTime.split(':')[1]
             this.appointment.start.setHours(hours)
             this.appointment.start.setMinutes(minutes)
-            this.appointment.end = new Date(this.appointment.start.getTime() + (this.treatment.duration * 60 * 1000));
+            this.appointment.end = new Date(this.appointment.start.getTime() + (this.treatment.duration * 60 * 1000))
             this.endTime = this.getEndTime
         },
         setEndTime(){
@@ -204,25 +205,27 @@ export default {
             }
 
             if (!this.startTime || !this.endTime) {
-                this.errors.hours = "Las horas son obligatorias";
+                this.errors.hours = "Las horas son obligatorias"
             } else if (!(this.endTime > this.startTime)) {
                 this.errors.hours = "La hora final no puede ser inferior a la de inicio"
+            } else if(this.endTime > this.close || this.startTime < this.open){
+                this.errors.hours = "Cita fuera del horario comercial"
             }
 
             if (!this.startDate) {
-                this.errors.date = "El día esobligatorio";
+                this.errors.date = "El día esobligatorio"
             } else{
-                const today = new Date();
-                today.setHours(0, 0, 0, 0);
+                const today = new Date()
+                today.setHours(0, 0, 0, 0)
                 if (today.valueOf() > this.appointment.start.valueOf()) {
                     this.errors.date = "Fecha anterior a hoy"
                 }
             }
 
             if (!this.treatment.price) {
-                this.errors.price = "El precio es obligatorio.";
+                this.errors.price = "El precio es obligatorio."
             } else if (isNaN(this.treatment.price) || parseFloat(this.treatment.price) != this.treatment.price) {
-                this.errors.price = "El precio debe ser un número";
+                this.errors.price = "El precio debe ser un número"
             }
 
             //Validation forms
@@ -256,7 +259,14 @@ export default {
         },
         getEndTime() {
             return this.appointment.end.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-        }
+        },
+        ...mapGetters('settings', ['getProperty']),
+        open(){
+            return this.getProperty('open')
+        },
+        close(){
+            return this.getProperty('close')
+        },
     },
     mounted() {
         this.startDate = this.getStartDate
@@ -269,6 +279,6 @@ export default {
 
 <style>
 .bg-80 {
-    background-color: rgba(0, 0, 0, .8);
+    background-color: rgba(0, 0, 0, .8)
 }
 </style>

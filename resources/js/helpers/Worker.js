@@ -7,7 +7,7 @@ export class Worker{
         this.last_name_2 = workerObject.last_name_2,
         this.email = workerObject.email,
         this.phone = workerObject.phone,
-        this.active = workerObject.active,
+        this.active = workerObject.active || 1,
         this.address = (workerObject.address) ?
             this.address = new Address( workerObject.address) :
             new Address({})

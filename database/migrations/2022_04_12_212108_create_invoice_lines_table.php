@@ -23,10 +23,8 @@ return new class extends Migration
             $table->foreign('billable_id')->references('id')->on('billables');
 
             //Invoice
-            $table->unsignedBigInteger('number');
-            $table->string('serie', 10);
-            $table->foreign('number')->references('number')->on('invoices');
-            $table->foreign('serie')->references('serie')->on('invoices');
+            $table->unsignedBigInteger('invoice_id');
+            $table->foreign('invoice_id')->references('id')->on('invoices');
 
             $table->double('unity_amount')->nullable();
             $table->double('total_amount')->nullable();

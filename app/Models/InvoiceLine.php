@@ -9,10 +9,10 @@ class InvoiceLine extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['billable_id', 'discount', 'quantity', 'serie', 'number'];
+    protected $fillable = ['billable_id', 'discount', 'quantity', 'invoice_id'];
 
     public function invoice(){
-        return $this->belongsTo(Invoice::class, 'number', 'number')->where('serie', $this->serie);
+        return $this->belongsTo(Invoice::class);
     }
 
     public function updateData(){

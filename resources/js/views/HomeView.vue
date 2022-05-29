@@ -10,10 +10,23 @@
 
 <script>
 import NavBar from '../components/NavBar.vue';
+import { mapActions, mapState } from 'vuex';
 
 export default {
   components:{
     NavBar
+  },
+  computed: {
+    ...mapState("auth", ["apiKey"]),
+
+  },
+  methods: {
+    ...mapActions('settings', ['getSettings']),
+  },
+  watch: {
+    apiKey(){
+      this.getSettings(this.apiKey)
+    }
   }
 };
 </script>

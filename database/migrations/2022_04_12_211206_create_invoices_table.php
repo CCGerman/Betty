@@ -14,10 +14,11 @@ return new class extends Migration
     public function up()
     {
         Schema::create('invoices', function (Blueprint $table) {
+            $table->id();
             $table->unsignedBigInteger('number');
             $table->string('serie', 10);
             $table->foreign('serie')->references('serie')->on('invoice_series');
-            $table->primary(['number', 'serie']);
+            $table->unique(['number', 'serie']);
             $table->unsignedBigInteger('client_id')->nullable();
             $table->foreign('client_id')->references('id')->on('clients');
             $table->date('date')->default(now());

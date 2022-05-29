@@ -48,7 +48,7 @@
           </li>
         </router-link>
       </ul>
-
+<!--
       <div class="mb-5">
         <h3 class="h6 mb-3">Buscar</h3>
         <form action="#" class="subscribe-form">
@@ -58,7 +58,7 @@
           </div>
         </form>
       </div>
-
+-->
       <div class="footer d-flex justify-content-center">
         <button @click="logMeOut()" class="btn">
           <i class="fa-solid fa-power-off"></i> Salir

@@ -36,5 +36,6 @@ const fillProduct = ( product ) => {
     formData.append('price', product.price)
     formData.append('description', product.description)
     formData.append('stock', product.stock)
+    formData.append('active', product.active)
     return formData
 }
