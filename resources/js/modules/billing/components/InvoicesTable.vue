@@ -17,7 +17,7 @@
     :class="{ 'alt-row' : index%2 != 0 }">
       <td>{{ invoice.serie }}-{{ invoice.number }}</td>
       <td>{{ invoice.date }}</td>
-      <td>{{ invoice.client.last_name_1 }} {{ invoice.client.last_name_2 }}</td>      
+      <td>{{ invoice.header?.client_full_name }}</td>      
       <td>{{ invoice.total_amount }}</td>
       <td>{{ invoice.balance }}</td>
 

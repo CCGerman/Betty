@@ -4,16 +4,29 @@ namespace App\Http\Controllers\Api\v1;
 
 use App\Http\Controllers\Controller;
 use App\Models\Address;
+use App\Models\InvoiceHeader;
 use App\Models\Invoice;
 use App\Models\InvoiceLine;
 use App\Models\InvoiceSerie;
-use Illuminate\Validation\Rule;
+use App\Modules\Address\DTO\AddressDTO;
+use App\Modules\Address\Services\AddressService;
+use App\Modules\Invoice\Services\InvoiceService;
+use GuzzleHttp\Psr7\Header;
 use Illuminate\Http\Request;
+
 
 class InvoiceController extends Controller
 {
 
+
     private $deleted_invoice_text = 'Compensa la factura';
+    protected InvoiceService $invoiceService;
+    protected AddressService $addressService;
+
+    public function __construct(InvoiceService $invoiceService, AddressService $addressService){
+        $this->invoiceService = $invoiceService;
+        $this->addressService = $addressService;
+    }
 
     /**
      * Display a listing of the resource.
@@ -22,7 +35,7 @@ class InvoiceController extends Controller
      */
     public function index()
     {
-        $invoices = Invoice::all();
+        $invoices = Invoice::with('header.address')->get();
 
         return response()->json([
             'data' => $invoices
@@ -42,18 +55,30 @@ class InvoiceController extends Controller
         $this->validateData($request);
 
         $data = $request->post();
-        $number = InvoiceSerie::where('serie', $data['serie'])->first()->getNumber();
-        $data['number'] = $number;
-        $invoice = new Invoice($data);
-        $invoice->save();
+        $invoice = $this->invoiceService->createInvoice($data['serie']);
+        $header = $this->invoiceService->createInvoiceHeader($invoice, $data['client_full_name'], $data['client_document']);
+        $addressDTO = new AddressDTO(
+            $data['address_1'], $data['address_2'], $data['city'], $data['postalcode'], $data['country']
+        );
+        $addressable = [
+            'id' => $header->id,
+            'class' => $header->getMorphClass()
+        ];
+        $address = $this->addressService->createAddress($addressDTO, $addressable);
 
-        $address = new Address($request->post());
-        $address->addressable_id = $invoice->id;
-        $address->addressable_type = $invoice->getMorphClass();
-        $address->save();
+        $headerData = [
+            'client_full_name' => $header->client_full_name,
+            'client_document' => $header->client_document,
+            'address_1' => $address->address_1,
+            'address_2' => $address->address_2,
+            'country' => $address->country,
+            'postalcode' => $address->postalcode,
+            'city' => $address->city,
+        ];
 
         $invoiceAmount = 0;
 
+        // @todo desacoplar en su propio servicio 
         foreach($data['lines'] as $lineData){
             $lineData['invoice_id'] = $invoice->id;
             $line = new InvoiceLine($lineData);
@@ -66,8 +91,10 @@ class InvoiceController extends Controller
         $invoice->balance = $invoiceAmount;
         $invoice->save();
 
-        $invoice->address = $address;
+        //$invoice->address = $address;
         $invoice->getData();
+        unset($invoice->header);
+        $invoice->header = $headerData;
 
         return response()->json([
             'message' => 'Factura añadida con éxito',
@@ -111,6 +138,13 @@ class InvoiceController extends Controller
 
             $total_amount = 0;
 
+            $header = new InvoiceHeader([
+                'client_full_name' => $invoice->header->client_full_name,
+                'client_document' => $invoice->header->client_document,
+                'invoice_id' => $deletedInvoice->id
+            ]);
+            $header->save();
+
             foreach($invoice->invoiceLines as $line){
                 $deletedLine = new InvoiceLine();
                 $deletedLine->quantity = -1*$line->quantity;
@@ -118,12 +152,14 @@ class InvoiceController extends Controller
                 $deletedLine->billable_id = $line->billable_id;
                 $deletedLine->unity_amount = $line->unity_amount;
                 $deletedLine->total_amount = -1*$line->total_amount;
-                $deletedLine->serie = $deletedInvoice->serie;
-                $deletedLine->number = $deletedInvoice->number;
+                $deletedLine->invoice_id = $deletedInvoice->id;
+                //$deletedLine->serie = $deletedInvoice->serie;
+                //$deletedLine->number = $deletedInvoice->number;
                 $deletedLine->save();
 
                 $total_amount += $deletedLine->total_amount;
             }
+            
 
             $invoice->deleted_on = $deletedInvoice->number;
             $invoice->save();
@@ -152,14 +188,8 @@ class InvoiceController extends Controller
     {
         return $request->validate([
             'serie' => 'required|exists:invoice_series,serie',
-            'client_id' => [
-                'exists:clients,id',
-                Rule::requiredIf(
-                    InvoiceSerie::where('serie', $request
-                        ->all()['serie'])
-                        ->first()->simplified == false
-                ),
-            ],
+            'client_full_name' => 'required|string',
+            'client_document' => 'required|string|min:4|max:25',
             'address_1' => 'required|string',
             'address_2' => 'string',
             'city' => 'required|string|max:50',

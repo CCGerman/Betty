@@ -32,7 +32,7 @@ export const deleteInvoice = async ( apiKey, invoiceId ) => {
 
 const fillInvoice = ( invoice ) => {
     const formData = new FormData()
-    /*
+    
     formData.append('name', invoice.name)
     formData.append('last_name_1', invoice.last_name_1)
     formData.append('last_name_2', invoice.last_name_2)
@@ -44,6 +44,6 @@ const fillInvoice = ( invoice ) => {
     formData.append('postalcode', invoice.address.postalcode)
     formData.append('country', invoice.address.country)
     formData.append('active', invoice.active)
-    */
+    
     return formData
 }

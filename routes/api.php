@@ -57,10 +57,10 @@ Route::middleware('auth:sanctum')
     ->resource('invoice', InvoiceController::class)
     ->only(['index', 'store']);
 Route::middleware('auth:sanctum')
-    ->get('/invoice/{serie}/{id}', [InvoiceController::class, 'show'])
+    ->get('/invoice/{invoice}', [InvoiceController::class, 'show'])
     ->name('invoice.show');
 Route::middleware('auth:sanctum')
-    ->delete('/invoice/{serie}/{id}', [InvoiceController::class, 'destroy'])
+    ->delete('/invoice/{invoice}', [InvoiceController::class, 'destroy'])
     ->name('invoice.destroy');
 
 Route::middleware('auth:sanctum')

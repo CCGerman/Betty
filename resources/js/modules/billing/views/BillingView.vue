@@ -20,7 +20,7 @@ import InvoiceModal from '../components/InvoiceModal.vue'
 import ButtonNew from '../../../components/ButtonNew.vue'
 
 import { mapState } from "vuex"
-import { 
+import {  
   getInvoices,
   getInvoice,
   addInvoice,
@@ -51,6 +51,7 @@ export default {
     async view(id){
       const result = await getInvoice(this.apiKey, id)
       this.activeInvoice = new Invoice( result.data )
+      console.log(this.activeInvoice)
       this.showModal = true
     },
     async saveInvoice(){

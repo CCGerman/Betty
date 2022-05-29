@@ -10,7 +10,7 @@ class Invoice extends Model
 {
     use HasFactory; //HasCompositePrimaryKey;
 
-    protected $fillable = ['serie', 'number', 'client_id', 'address_id', 'date'];
+    protected $fillable = ['serie', 'number', 'client_id', 'date'];
 
     public function client(){
         return $this->belongsTo(Client::class);
@@ -20,8 +20,8 @@ class Invoice extends Model
         return $this->belongsTo(InvoiceSerie::class);
     }
 
-    public function address(){
-        return $this->morphOne(Address::class, 'addressable');
+    public function header(){
+        return $this->hasOne(InvoiceHeader::class);
     }
 
     public function invoiceLines(){
@@ -49,14 +49,14 @@ class Invoice extends Model
     public function getData(){
 
         foreach($this->invoiceLines as &$line){
-            unset($line->invoice_number);
-            unset($line->serie);
+            unset($line->invoice_id);
         }
 
         foreach($this->payments as &$payment){
-            unset($payment->number);
-            unset($payment->serie); 
+            unset($payment->invoice_id);
         }
+
+        unset($this->header->invoice_id);
     }
 }
 

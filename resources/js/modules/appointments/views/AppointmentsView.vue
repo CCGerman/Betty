@@ -104,10 +104,10 @@ export default {
     editAppointment(appointment){
       this.createAppointment(appointment)
     },
-    saveAppointment(appointment){
+    async saveAppointment(appointment){
       if(appointment.id)
-      saveAppointment(this.apiKey, appointment)
-      else addAppointment(this.apiKey, appointment)
+      await saveAppointment(this.apiKey, appointment)
+      else await addAppointment(this.apiKey, appointment)
       this.getAppointments()
       this.showModal = false
 
